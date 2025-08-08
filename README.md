@@ -1,105 +1,121 @@
-# 📈 Portfolio Optimization: Classical vs ML-Driven Strategies
+# 📈 Portfolio Optimization Engine: Markowitz vs ML-Driven Strategies
 
-This project compares traditional **Markowitz portfolio optimization** with a **machine learning-enhanced optimizer** using historical stock data. It demonstrates how predictive models can complement classical finance to construct portfolios with optimal risk-return tradeoffs.
+This project implements an **end-to-end portfolio optimization engine** that compares  
+traditional **Markowitz mean-variance optimization** with a **machine learning–based strategy**  
+using historical equity data and walk-forward backtesting.
+
+It demonstrates how predictive models can complement classical finance to  
+construct portfolios with improved risk-adjusted returns.
+
+---
 
 ## 🔍 Project Overview
 
-We analyze and compare two strategies:
+We compare two strategies over rolling time windows:
 
 1. **Classical Markowitz Optimization**  
-   Maximizes the Sharpe ratio using historical means and covariances.
+   - Maximizes Sharpe Ratio using historical mean returns and covariances  
+   - Implemented via [`PyPortfolioOpt`](https://pyportfolioopt.readthedocs.io/)
 
 2. **Machine Learning-Based Optimization**  
-   Uses a Random Forest model to forecast next-day returns and optimizes accordingly.
+   - Uses a `RandomForestRegressor` to forecast next-day returns  
+   - Allocates portfolio weights based on predicted returns  
+   - Walk-forward evaluation to simulate real-time deployment
+
+---
 
 ## 🧠 Techniques Used
 
-- **Efficient Frontier Construction** (via `PyPortfolioOpt`)
-- **Return Forecasting** with `RandomForestRegressor` (via `Scikit-learn`)
+- **Walk-Forward Backtesting** for realistic performance measurement
+- **Efficient Frontier Construction** (`PyPortfolioOpt`)
+- **Return Forecasting** with Random Forest (`scikit-learn`)
+- **Robust Covariance Estimation** with NaN/outlier handling
 - **Data Retrieval** from Yahoo Finance (`yfinance`)
-- **Performance Visualization** using `matplotlib`
-- **Modular Python scripting** and reusable utilities
+- **Performance Metrics:** Sharpe Ratio, CAGR, Maximum Drawdown
+- **Side-by-Side Equity Curve Visualization** (`matplotlib`)
 
 ---
 
 ## 🗂️ Project Structure
 
-portfolio-optimizer/<br/>
-│<br/>
-├── data/                        # Saved raw price data <br/>
-│   └── yfinance_prices_2018_2024.csv<br/>
-│<br/>
-├── results/                     # Outputs: plots & optimized weights<br/>
-│   ├── markowitz_weights.csv<br/>
-│   ├── ml_optimizer_weights.csv<br/>
-│   ├── efficient_frontier.png<br/>
-│   └── compare_frontier.png<br/>
+```
+
+Portfolio\_Optimization\_Engine/
 │
-├── scripts/                     # Modular Python scripts<br/>
-│   ├── utils.py                 # Price download helper<br/>
-│   ├── markowitz.py            # Classical optimizer<br/>
-│   ├── ml_optimizer.py         # ML-based optimizer<br/>
-│   ├── plot_frontier.py        # Frontier + asset point plot<br/>
-│   ├── compare_strategies.py   # Final comparison plot<br/>
-│   └── save_data_snapshot.py   # Saves downloaded raw data<br/>
-│<br/>
-├── requirements.txt            # Project dependencies<br/>
-└── README.md                   # This file<br/>
+├── data\_loader.py          # Price download & cleaning
+├── optimizer.py            # Markowitz optimization logic
+├── models.py               # ML model training & prediction
+├── backtester.py           # Walk-forward backtesting engine
+├── main.py                 # Orchestrates full pipeline
+├── run\_all.sh              # Smoke tests & quick checks
+│
+├── results/                # Output plots & logs
+│   ├── equity\_comparison.png
+│   ├── markowitz\_weights.csv
+│   └── ml\_optimizer\_weights.csv
+│
+├── requirements.txt
+└── README.md
+
+````
 
 ---
 
-## 📊 Sample Output
+## 📊 Example Results
 
-### Efficient Frontier with Asset Points  
-![Efficient Frontier](results/efficient_frontier.png)
+**Backtest Period:** 2023-08-04 → 2025-08-07  
 
-### Strategy Comparison  
-![Strategy Comparison](results/compare_frontier.png)
+| Strategy    | Sharpe Ratio | CAGR   | Max Drawdown |
+|-------------|--------------|--------|--------------|
+| Markowitz   | 1.19         | 31.39% | -29.85%      |
+| ML Forecast | 1.44         | 42.40% | -21.97%      |
+
+**Equity Curve Comparison:**  
+![Equity Curves](results/equity_comparison.png)
 
 ---
 
 ## 🏗️ How to Run
 
-1. **Install requirements** (if not already):
+1. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
+   ```
 
-	2.	Generate historical price data:
+2. **Run the full pipeline:**
 
-python scripts/save_data_snapshot.py
+   ```bash
+   python main.py
+   ```
 
+3. **Run quick smoke tests:**
 
-	3.	Run optimizers:
+   ```bash
+   ./run_all.sh
+   ```
 
-python scripts/markowitz.py
-python scripts/ml_optimizer.py
+---
 
+## 📦 Requirements
 
-	4.	Plot efficient frontier and compare strategies:
+* Python 3.11+
+* `pypfopt`
+* `scikit-learn`
+* `matplotlib`
+* `pandas`
+* `yfinance`
 
-python scripts/plot_frontier.py
-python scripts/compare_strategies.py
+Install all with:
 
-
-
-⸻
-
-📌 Requirements
-	•	Python 3.8+
-	•	pypfopt
-	•	scikit-learn
-	•	matplotlib
-	•	pandas
-	•	yfinance
-
-You can install them via:
-
+```bash
 pip install pypfopt scikit-learn matplotlib pandas yfinance
+```
 
-⸻
+---
 
-📬 Future Work
-	•	Add backtesting and performance metrics over time
-	•	Incorporate transaction costs and turnover constraints
-	•	Try other ML models (XGBoost, LSTM) for return forecasting
-	•	Build interactive dashboard using Shiny or Dash
+## 📬 Future Work
+
+* Add **multi-horizon evaluation** (1-year, 3-year, 5-year returns)
+* Incorporate **transaction costs & turnover constraints**
+* Experiment with other ML models (XGBoost, LSTM)
+* Build interactive dashboards with **Shiny** or **Dash**
