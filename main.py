@@ -14,7 +14,6 @@ import pandas as pd
 import yfinance as yf
 from sklearn.ensemble import RandomForestRegressor
 from pypfopt import risk_models, EfficientFrontier
-from optimizer import optimize_mv
 from evaluate  import sharpe_ratio, cagr, max_drawdown
 from visuals   import plot_equity
 
